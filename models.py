@@ -13,9 +13,11 @@ class User(Base):
     password_hash = Column(String(64))
 
     def hash_password(self, password):
-        strpwd = sha256_crypt.encrypt(password)
-        # strpwd = pwd_context.encrypt(password)
-        self.password_hash = str(strpwd)
+        self.password_hash = sha256_crypt.encrypt(password)
+        print (isinstance(self.password_hash, (str)))
+        print("Hello %s", self.password_hash)
+
+
 
     def verify_password(self, password):
         return sha256_crypt.verify(password, self.password_hash)
