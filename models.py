@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 from passlib.apps import custom_app_context as pwd_context
+from passlib.hash import sha256_crypt
 Base = declarative_base()
 
 class User(Base):
@@ -12,10 +13,13 @@ class User(Base):
     password_hash = Column(String(64))
 
     def hash_password(self, password):
-        self.password_hash = pwd_context.encrypt(password)
+        strpwd = sha256_crypt.encrypt(password)
+        # strpwd = pwd_context.encrypt(password)
+        self.password_hash = str(strpwd)
 
     def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
+        return sha256_crypt.verify(password, self.password_hash)
+        # return pwd_context.verify(password, self.password_hash)
 
 
 engine = create_engine('sqlite:///users.db')
