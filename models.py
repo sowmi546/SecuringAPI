@@ -4,11 +4,12 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 from passlib.apps import custom_app_context as pwd_context
 from passlib.hash import sha256_crypt
+from sqlalchemy.schema import Sequence
 Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('user_id_seq', start=1001, increment=1), primary_key=True)
     username = Column(String(32), index=True)
     password_hash = Column(String(64))
 
